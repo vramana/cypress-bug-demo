@@ -9,29 +9,10 @@ import { withStyles } from "@material-ui/core/styles";
 import Downshift from "downshift";
 import MenuItem from "@material-ui/core/MenuItem";
 
-const BodyText = ({ children }) => children;
-
-const styles = {
-  container: {
-    marginLeft: "300px"
-  },
-  popper: {
-    zIndex: 1500
-  }
-};
-
-const scrollableMaxResults = 250;
-
 function Menu({ downshiftProps, ...props }) {
-  const {
-    classes,
-    dataSource,
-    dataSourceConfig,
-    maxSearchResults,
-    scrollable
-  } = props;
+  const { classes, dataSource, dataSourceConfig } = props;
 
-  const searchResults = scrollable ? scrollableMaxResults : maxSearchResults;
+  const searchResults = 5;
 
   const {
     getItemProps,
@@ -52,11 +33,7 @@ function Menu({ downshiftProps, ...props }) {
       selected: isHighlighted
     };
 
-    return (
-      <MenuItem {...props}>
-        <BodyText>{item[dataSourceConfig.text]}</BodyText>
-      </MenuItem>
-    );
+    return <MenuItem {...props}>{item[dataSourceConfig.text]}</MenuItem>;
   });
 
   const popperNode = props.popperRef.current;
@@ -105,38 +82,7 @@ function Field({ downshiftProps, ...props }) {
 const defaultItem = {};
 
 const autoCompleteStyles = {
-  search: {
-    minHeight: 50,
-    justifyContent: "center"
-  },
-  selectedItem: { fontWeight: 500 },
-
-  popper: { zIndex: 1500 },
-
-  container: { position: "relative" },
-
-  fullWidthContainer: {
-    position: "relative",
-    width: "100%"
-  },
-  icon: {
-    paddingRight: 5,
-    "&:hover": {
-      backgroundColor: "transparent"
-    }
-  },
-
-  paper: {
-    position: "absolute",
-    zIndex: 3,
-    left: 0,
-    right: 0
-  },
-  bodyText: {
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-    overflow: "hidden"
-  }
+  popper: { zIndex: 1500 }
 };
 
 function _AutoComplete(props) {
@@ -197,6 +143,12 @@ const AutoComplete = withStyles(autoCompleteStyles)(_AutoComplete);
 AutoComplete.defaultProps = {
   maxSearchResults: 5,
   onChange: () => {}
+};
+
+const styles = {
+  container: {
+    marginLeft: "300px"
+  }
 };
 
 function _App({ classes }) {
