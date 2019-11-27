@@ -1,11 +1,13 @@
 describe("Testing", () => {
   it("Check", () => {
     cy.visit("/");
-    cy.contains("FOODS").click();
-    cy.get("[data-test-id=menu]")
-      .contains("Pork")
+    cy.get("[name=foods]")
+      .click()
+      .type("Beef");
+    cy.get("[data-test-id=autoCompleteMenu]")
+      .contains("Beef")
       .click();
-    cy.get("[data-test-id=menu]").should("not.exist");
-    cy.contains("Pork");
+    cy.get("[data-test-id=autoCompleteMenu]").should("not.exist");
+    cy.get("[name=foods]").contains("Beef");
   });
 });
