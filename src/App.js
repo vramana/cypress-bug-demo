@@ -79,8 +79,6 @@ function Field({ downshiftProps, ...props }) {
   return <TextField {...textFieldProps} />;
 }
 
-const defaultItem = {};
-
 const autoCompleteStyles = {
   popper: { zIndex: 1500 }
 };
@@ -93,19 +91,12 @@ function _AutoComplete(props) {
     TextFieldProps,
     dataSourceConfig,
     defaultSelectedItem,
-    variant = "default",
-    value,
     onChange,
     onInputChange
   } = props;
   const itemToString = item => (item && item[dataSourceConfig.text]) || "";
 
-  let _props;
-  if (variant === "next") {
-    _props = { selectedItem: value || defaultItem };
-  } else {
-    _props = { initialSelectedItem: defaultSelectedItem };
-  }
+  const _props = { initialSelectedItem: defaultSelectedItem };
 
   return (
     <Downshift
