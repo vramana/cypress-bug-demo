@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import Popper from "@material-ui/core/Popper";
 import TextField from "@material-ui/core/TextField";
 
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 
 import Downshift from "downshift";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -139,13 +139,15 @@ AutoComplete.defaultProps = {
   onChange: () => {}
 };
 
-const styles = {
+const useStyles = makeStyles({
   container: {
     marginLeft: "300px"
   }
-};
+});
 
-function _App({ classes }) {
+function App() {
+  const classes = useStyles();
+
   const foods = [
     { name: "Chicken" },
     { name: "Mutton" },
@@ -162,7 +164,6 @@ function _App({ classes }) {
           fullWidth: false
         }}
       />
-      <ComboBox />
     </div>
   );
 }
@@ -283,6 +284,5 @@ const top100Films = [
   { title: 'Monty Python and the Holy Grail', year: 1975 },
 ];
 
-const App = withStyles(styles)(_App);
 
 export default App;
