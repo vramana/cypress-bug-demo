@@ -1,147 +1,14 @@
-import React, { useRef } from "react";
-import matchSorter from "match-sorter";
-import Paper from "@material-ui/core/Paper";
-import Popper from "@material-ui/core/Popper";
-import TextField from "@material-ui/core/TextField";
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
 
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from '@material-ui/core/styles';
 
-import Downshift from "downshift";
-import MenuItem from "@material-ui/core/MenuItem";
-
-import Autocomplete from '@material-ui/lab/Autocomplete';
-
-
-function Menu({ downshiftProps, ...props }) {
-  const { classes, dataSource, dataSourceConfig } = props;
-
-  const searchResults = 5;
-
-  const {
-    getItemProps,
-    getMenuProps,
-    isOpen,
-    inputValue,
-    highlightedIndex
-  } = downshiftProps;
-
-  let items = matchSorter(dataSource, inputValue, {
-    keys: [dataSourceConfig.text]
-  }).slice(0, searchResults);
-  items = items.map((item, index) => {
-    const isHighlighted = highlightedIndex === index;
-    const props = {
-      ...getItemProps({ item }),
-      key: index,
-      selected: isHighlighted
-    };
-
-    return <MenuItem {...props}>{item[dataSourceConfig.text]}</MenuItem>;
-  });
-
-  const popperNode = props.popperRef.current;
-
-  return (
-    <Popper
-      open={isOpen}
-      anchorEl={popperNode}
-      placement="bottom"
-      modifiers={{
-        flip: { enabled: false },
-        hide: { enabled: false },
-        preventOverflow: { enabled: false }
-      }}
-      className={classes.popper}
-      data-test-id="autoCompleteMenu"
-    >
-      <div {...(isOpen ? getMenuProps({}, { suppressRefError: true }) : {})}>
-        <Paper square>{items}</Paper>
-      </div>
-    </Popper>
-  );
-}
-
-function Field({ downshiftProps, ...props }) {
-  const { classes, search, clear, popperRef, TextFieldProps } = props;
-
-  const { inputValue, getInputProps, openMenu } = downshiftProps;
-
-  const clearInputAdornment = null;
-
-  const textFieldProps = {
-    className: search === true ? classes.search : "",
-    ...TextFieldProps,
-    InputProps: {
-      ...TextFieldProps.InputProps,
-      ...getInputProps({ onFocus: openMenu }),
-      inputRef: popperRef,
-      endAdornment: clear && inputValue !== "" ? clearInputAdornment : undefined
-    }
-  };
-
-  return <TextField {...textFieldProps} />;
-}
-
-const autoCompleteStyles = {
-  popper: { zIndex: 1500 }
-};
-
-function _AutoComplete(props) {
-  const popperRef = useRef();
-
-  const {
-    classes,
-    TextFieldProps,
-    dataSourceConfig,
-    defaultSelectedItem,
-    onChange,
-    onInputChange
-  } = props;
-  const itemToString = item => (item && item[dataSourceConfig.text]) || "";
-
-  const _props = { initialSelectedItem: defaultSelectedItem };
-
-  return (
-    <Downshift
-      onChange={onChange}
-      onInputValueChange={onInputChange}
-      itemToString={itemToString}
-      {..._props}
-    >
-      {downshiftProps => (
-        <div
-          className={
-            TextFieldProps.fullWidth !== false
-              ? classes.fullWidthContainer
-              : classes.container
-          }
-        >
-          <Field
-            downshiftProps={downshiftProps}
-            popperRef={popperRef}
-            {...props}
-          />
-          <Menu
-            downshiftProps={downshiftProps}
-            popperRef={popperRef}
-            {...props}
-          />
-        </div>
-      )}
-    </Downshift>
-  );
-}
-
-const AutoComplete = withStyles(autoCompleteStyles)(_AutoComplete);
-
-AutoComplete.defaultProps = {
-  maxSearchResults: 5,
-  onChange: () => {}
-};
+import MuiAutoComplete from '@material-ui/lab/Autocomplete';
+import AutoComplete from './AutoComplete';
 
 const useStyles = makeStyles({
   container: {
-    marginLeft: "300px"
+    marginLeft: '300px'
   }
 });
 
@@ -149,18 +16,18 @@ function App() {
   const classes = useStyles();
 
   const foods = [
-    { name: "Chicken" },
-    { name: "Mutton" },
-    { name: "Beef" },
-    { name: "Pork" }
+    { name: 'Chicken' },
+    { name: 'Mutton' },
+    { name: 'Beef' },
+    { name: 'Pork' }
   ];
   return (
     <div className={classes.container}>
       <AutoComplete
         dataSource={foods}
-        dataSourceConfig={{ value: "name", text: "name" }}
+        dataSourceConfig={{ value: 'name', text: 'name' }}
         TextFieldProps={{
-          name: "foods",
+          name: 'foods',
           fullWidth: false
         }}
       />
@@ -170,12 +37,14 @@ function App() {
 
 export function ComboBox() {
   return (
-    <Autocomplete
+    <MuiAutoComplete
       id="combo-box-demo"
       options={top100Films}
-      getOptionLabel={(option) => option.title}
+      getOptionLabel={option => option.title}
       style={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
+      renderInput={params => (
+        <TextField {...params} label="Combo box" variant="outlined" />
+      )}
     />
   );
 }
@@ -234,7 +103,11 @@ const top100Films = [
   { title: 'Apocalypse Now', year: 1979 },
   { title: 'Alien', year: 1979 },
   { title: 'Sunset Boulevard', year: 1950 },
-  { title: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb', year: 1964 },
+  {
+    title:
+      'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb',
+    year: 1964
+  },
   { title: 'The Great Dictator', year: 1940 },
   { title: 'Cinema Paradiso', year: 1988 },
   { title: 'The Lives of Others', year: 2006 },
@@ -281,8 +154,7 @@ const top100Films = [
   { title: 'Inglourious Basterds', year: 2009 },
   { title: 'Snatch', year: 2000 },
   { title: '3 Idiots', year: 2009 },
-  { title: 'Monty Python and the Holy Grail', year: 1975 },
+  { title: 'Monty Python and the Holy Grail', year: 1975 }
 ];
-
 
 export default App;
